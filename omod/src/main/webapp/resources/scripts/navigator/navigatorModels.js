@@ -191,9 +191,9 @@ FieldModel.prototype.resetValue = function() {
     if (selectedOption.length > 0) {
         selectedOption.removeAttr('selected');
     }
-    // TODO expand to handle the case of a *set* of radio buttons being a single field?
-    else if (this.element.attr('type') == 'radio' && this.element.is(':checked')) {
+    else if (this.element.attr('type') == 'radio') {
         this.element.removeAttr('checked');
+        this.element.siblings('input[type="radio"]').removeAttr('checked');
     }
     // handle checkbox
     else if (this.element.attr('type') == 'checkbox') {

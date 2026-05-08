@@ -197,14 +197,32 @@ describe("Test for simple form models", function() {
 
         it("should reset the value of radio set field", function() {
             var fieldModel = new FieldModel();
-            var element = jasmine.createSpyObj('element', ['removeAttr', 'removeClass', 'show', 'attr','is', 'find', 'val' ]);
+            var element = jasmine.createSpyObj('element', ['removeAttr', 'removeClass', 'show', 'attr', 'is', 'find', 'val']);
             fieldModel.element = element;
             element.find = jasmine.createSpy('find() spy').and.returnValue([]);
             element.attr = jasmine.createSpy('attr() spy').and.returnValue('radio');
-            element.is = jasmine.createSpy('is() spy').and.returnValue(true);
+            var siblings = jasmine.createSpyObj('siblings', ['removeAttr']);
+            element.siblings = jasmine.createSpy('siblings() spy').and.returnValue(siblings);
 
             fieldModel.resetValue();
             expect(element.removeAttr).toHaveBeenCalledWith("checked");
+            expect(element.siblings).toHaveBeenCalledWith('input[type="radio"]');
+            expect(siblings.removeAttr).toHaveBeenCalledWith("checked");
+        })
+
+        it("should reset checked on all sibling radio buttons in a radio set with multiple options", function() {
+            var fieldModel = new FieldModel();
+            var firstRadio = jasmine.createSpyObj('firstRadio', ['removeAttr', 'removeClass', 'show', 'attr', 'is', 'find', 'val']);
+            fieldModel.element = firstRadio;
+            firstRadio.find = jasmine.createSpy('find() spy').and.returnValue([]);
+            firstRadio.attr = jasmine.createSpy('attr() spy').and.returnValue('radio');
+            var otherRadios = jasmine.createSpyObj('otherRadios', ['removeAttr']);
+            firstRadio.siblings = jasmine.createSpy('siblings() spy').and.returnValue(otherRadios);
+
+            fieldModel.resetValue();
+            expect(firstRadio.removeAttr).toHaveBeenCalledWith("checked");
+            expect(firstRadio.siblings).toHaveBeenCalledWith('input[type="radio"]');
+            expect(otherRadios.removeAttr).toHaveBeenCalledWith("checked");
         })
 
     });
