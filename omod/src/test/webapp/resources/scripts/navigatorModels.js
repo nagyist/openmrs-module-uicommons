@@ -197,7 +197,7 @@ describe("Test for simple form models", function() {
 
         it("should reset the value of radio set field", function() {
             var fieldModel = new FieldModel();
-            var element = jasmine.createSpyObj('element', ['removeAttr', 'removeClass', 'show', 'attr','is', 'find', 'val' ]);
+            var element = jasmine.createSpyObj('element', ['removeAttr', 'removeClass', 'show', 'siblings', 'attr','is', 'find', 'val' ]);
             fieldModel.element = element;
             element.find = jasmine.createSpy('find() spy').and.returnValue([]);
             element.attr = jasmine.createSpy('attr() spy').and.returnValue('radio');
@@ -207,7 +207,7 @@ describe("Test for simple form models", function() {
             expect(element.removeAttr).toHaveBeenCalledWith("checked");
         })
 
-    });
+    });radio
 
     describe("Unit tests for QuestionModel", function() {
 
