@@ -19,6 +19,14 @@
         return (it instanceof org.codehaus.jackson.node.TextNode) ? it.textValue : it;
     }
 
+    def selectedValue = null
+    config.options.each {
+        if (it.selected || it.value == config.initialValue || cleanup(it.value) == config.initialValue ||
+                (config.defaultIfOnlyOneOption && config.options.size() == 1)) {
+            selectedValue = cleanup(it.value)
+        }
+    }
+
     def otherAttributes = ''
     if (config.otherAttributes){
         config.otherAttributes.each{ attr, val ->
@@ -49,7 +57,7 @@
             <option value="">${ ui.message(config.emptyOptionLabel ?: '&nbsp;') }</option>
         <% } %>
         <% config.options.each {
-            def selected = it.selected || it.value == config.initialValue || cleanup(it.value) == config.initialValue
+            def selected = cleanup(it.value) == selectedValue
         %>
             <option value="${ cleanup(it.value) }"  <% if (selected) { %>selected<% } %>>${ ui.message(cleanup(it.label)) }</option>
         <% } %>
@@ -62,7 +70,7 @@
 
     var viewModel = viewModel || {};
     viewModel.validations = viewModel.validations || [];
-    viewModel.${ config.id } = ko.observable();
+    viewModel.${ config.id } = ko.observable(<% if (selectedValue) { %>'${ selectedValue }'<% } %>);
 
     <% if (config.dependency || required) { %>
 
