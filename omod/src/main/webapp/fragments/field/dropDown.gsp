@@ -70,7 +70,7 @@
 
     var viewModel = viewModel || {};
     viewModel.validations = viewModel.validations || [];
-    viewModel.${ config.id } = ko.observable(<% if (selectedValue) { %>'${ selectedValue }'<% } %>);
+    viewModel.${ config.id } = ko.observable(<% if (selectedValue) { %>'${ selectedValue.toString().replace("\\", "\\\\").replace("'", "\\'") }'<% } %>);
 
     <% if (config.dependency || required) { %>
 
